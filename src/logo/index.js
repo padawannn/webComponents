@@ -11,11 +11,11 @@ customElements.define('geo-logo', class extends HTMLElement {
  }
 
  static get observedAttributes() {
-   return ['animated','width', 'height','interval', 'duration'];
+   return ['move','width', 'height','interval', 'duration'];
  }
 
  attributeChangedCallback(name, oldValue, newValue) {
-   if(name=='animated'){
+   if(name=='move'){
      this._animated(1500);
 
    }else if(name=='width'){
