@@ -1,10 +1,10 @@
 'use strict';
 
 customElements.define('geo-logo', class extends HTMLElement {
- constructor() {
+ constructor(a) {
    super();
    let shadowRoot = this.attachShadow({mode: 'open'});
-   let _document = document.currentScript.ownerDocument;
+   let _document = document.currentScript ? document.currentScript.ownerDocument : document;
    const t = _document.querySelector('#geo-logo-template');
    const instance = t.content.cloneNode(true);
    shadowRoot.appendChild(instance);

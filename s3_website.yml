@@ -1,0 +1,28 @@
+s3_id: <%= ENV['S3_WEBSITE_ID'] %>
+s3_secret: <%= ENV['S3_WEBSITE_SECRET'] %>
+s3_bucket: webcomponents.geographica.gs
+cloudfront_distribution_id: E1UWHR92WICVOH
+
+
+site: public
+
+max_age: 300
+
+s3_endpoint: eu-west-1
+
+exclude_from_upload:
+  - .DS_Store
+  - .htaccess
+
+gzip:
+  - .html
+  - .css
+  - .js
+
+cloudfront_distribution_config:
+  default_cache_behavior:
+    min_TTL: <%= 60 * 60 * 24 %>
+  aliases:
+    quantity: 1
+    items:
+      CNAME: webcomponents.geographica.gs
