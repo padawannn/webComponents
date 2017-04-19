@@ -120,6 +120,8 @@ customElements.define('geo-logo', class extends HTMLElement {
 
  _animated(interval){
    var current = 0;
+   if(this._interval)
+    clearInterval(this._interval);
    this._interval = setInterval(()=>{
      this._animate(this.positions[current]);
      current = current == (this.positions.length - 1) ? 0:(current + 1);
