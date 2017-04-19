@@ -8,15 +8,30 @@ customElements.define('geo-logo', class extends HTMLElement {
    const t = _document.querySelector('#geo-logo-template');
    const instance = t.content.cloneNode(true);
    shadowRoot.appendChild(instance);
+
+   shadowRoot.querySelector('svg').addEventListener('mouseover', (event)=>{
+       clearInterval(this._interval);
+       this._animate(this.positions[this.positions.length-1]);
+   });
+   shadowRoot.querySelector('svg').addEventListener('mouseout', (event)=>{
+       if(this._interval && this.getAttribute('move') != null)
+        this._animated((this.getAttribute('interval') && this.getAttribute('interval') !='') ? this.getAttribute('interval'):3500);
+   });
+
  }
 
  static get observedAttributes() {
-   return ['move','width', 'height','interval', 'duration'];
+   return ['move','width', 'height','interval', 'duration', 'white'];
  }
 
  attributeChangedCallback(name, oldValue, newValue) {
    if(name=='move'){
-     this._animated(1500);
+     if(newValue != null){
+      this._animated(3500);
+    }else if(this._interval){
+      clearInterval(this._interval);
+      this._animate(this.positions[this.positions.length-1]);
+    }
 
    }else if(name=='width'){
      this.shadowRoot.querySelector('svg').setAttribute('width',newValue);
@@ -33,12 +48,17 @@ customElements.define('geo-logo', class extends HTMLElement {
      for(var a of animate){
        a.setAttribute('dur',parseFloat(newValue));
      }
+   }else if(name=='white'){
+     let elements = this.shadowRoot.querySelectorAll('path[fill],rect[fill]');
+     for(var e of elements){
+       e.setAttribute('fill','#fff');
+     }
    }
 
  }
 
- _animated(interval){
-   let positions = [
+ get positions(){
+   return [
      {
        G:{x:-16,y:-16},
        E:{x:0,y:-16},
@@ -94,19 +114,26 @@ customElements.define('geo-logo', class extends HTMLElement {
        C:{x:0,y:0},
        A_2:{x:0,y:0},
        point:{x:0,y:0}
-     },
-   ]
-   var letters = this.shadowRoot.querySelectorAll('[letter]'),
-     current = 0;
-
-   this._interval = setInterval(function(){
-     for(var i=0; i<letters.length; i++){
-       var animate = letters[i].querySelector('animateTransform');
-       animate.setAttribute('from',animate.getAttribute('to'));
-       animate.setAttribute('to',positions[current][letters[i].getAttribute('letter')].x + ' ' + positions[current][letters[i].getAttribute('letter')].y);
-       animate.beginElement();
      }
-     current = current == (positions.length - 1) ? 0:(current + 1);
+   ];
+ }
+
+ _animated(interval){
+   var current = 0;
+   this._interval = setInterval(()=>{
+     this._animate(this.positions[current]);
+     current = current == (this.positions.length - 1) ? 0:(current + 1);
    }, interval);
  }
+
+ _animate(position){
+   var letters = this.shadowRoot.querySelectorAll('[letter]')
+    for(var i=0; i<letters.length; i++){
+      var animate = letters[i].querySelector('animateTransform');
+      animate.setAttribute('from',animate.getAttribute('to'));
+      animate.setAttribute('to',position[letters[i].getAttribute('letter')].x + ' ' + position[letters[i].getAttribute('letter')].y);
+      animate.beginElement();
+    }
+ }
+
 });

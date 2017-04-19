@@ -23,5 +23,20 @@ gulp.task('html', () =>
     .pipe(gulp.dest('../../public/logo'))
 );
 
+gulp.task('scripts-debug', () =>
+  gulp.src('./index.js')
+    .pipe(gulp.dest('../../public/logo'))
+);
+
+gulp.task('html-debug', () =>
+  gulp.src('./index.html')
+    .pipe(gulp.dest('../../public/logo'))
+);
+
+gulp.task('watch', function() {
+  gulp.watch('./*.*', ['scripts-debug', 'html-debug']);
+  return;
+});
+
 
 gulp.task('default',['scripts', 'html'])
