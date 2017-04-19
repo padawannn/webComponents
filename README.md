@@ -3,6 +3,6 @@
 ### Options
 - width="100px"
 - height="100px"
-- animated
+- move
 - interval="1500"
 - duration="0.25s"
